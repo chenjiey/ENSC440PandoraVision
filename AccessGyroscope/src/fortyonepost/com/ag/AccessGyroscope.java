@@ -72,40 +72,67 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
         //get a hook to the sensor service
         sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         initListeners();
-        
+
      // Button press event listener
         toggleButton1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             	onOffToggle = isChecked;
-		          if (isChecked) {
-		        	  
-		        	  	//messsage = textField.getText().toString(); // get the text message on the text field
-						//textField.setText(""); // Reset the text field to blank
-//						SendMessage sendMessageTask = new SendMessage();
-//						sendMessageTask.execute();
-		          
-		          } else {
-		          
-		          }
+		        if (isChecked) {  
+	        	  	//messsage = textField.getText().toString(); // get the text message on the text field
+					//textField.setText(""); // Reset the text field to blank
+
+
+		        	/* 
+					This creates the class and executes the send message. 
+		        	*/
+					SendMessage sendMessageTask = new SendMessage();
+					sendMessageTask.execute();
+
+		        } else {
+		         	// raise an error message here
+		        }
             }
         });
     }
     
     
 	private class SendMessage extends AsyncTask<Void, Void, Void> {
+		
 		@Override
 		protected Void doInBackground(Void... params) {
 			try {
+				/* 
+				(Jeremy Nov.11.2014) It looks like you are creating the
+				connection more than once. If we create a connection to the 
+				server twice even though a connection has previously been
+				established this could cause the error. I think this should
+				be moved into a contructor and stored 
+				*/
+
 				port = Integer.parseInt(serverPort.getText().toString());
 				SERVER_IP1 = serverIP.getText().toString();
-				client = new Socket(SERVER_IP1, port); // connect to the server
-				//while(onOffToggle) {
-					printwriter = new PrintWriter(client.getOutputStream(), true);
-					printwriter.write(messsage); // write the message to output stream
+				
+				// connect the client to the server
+				client = new Socket(SERVER_IP1, port);
+
+				/* 
+				Once the socket is initialized you only need to run the
+				code below upon orientation update. There are a couple ways to
+				fix this I will try a few tomorrow. 
+
+				One method I'm pretty sure will
+				work but I don't like it because it removes the ability to run
+				in another thread like was done currently.
+				*/
+
+				printwriter = new PrintWriter(client.getOutputStream(), true);
+				printwriter.write(messsage); // write the message to output stream
 				printwriter.flush();
 				printwriter.close();
-				//}
-				client.close(); // closing the connection
+
+				// Client.close should be called at the end, so when you toggle
+				// the button off.
+				// client.close(); // close the connection
 	
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
@@ -180,9 +207,10 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 		messsage = "Orientation Y (Roll) :"+ Float.toString(accMagOrientation[0]); // +"\n"+
 				  // "Orientation Y (Pitch) :"+ Float.toString(accMagOrientation[1]) +"\n"+
 				  // "Orientation Z (Yaw) :"+ Float.toString(accMagOrientation[2]);
-		if(onOffToggle) {
-		SendMessage sendMessageTask = new SendMessage();
-		sendMessageTask.execute();
+		
+		if (onOffToggle) {
+			SendMessage sendMessageTask = new SendMessage();
+			sendMessageTask.execute();
 		}
 	}
 	

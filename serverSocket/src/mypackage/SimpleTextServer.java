@@ -1,6 +1,5 @@
 package mypackage;
 
- 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,36 +22,41 @@ public class SimpleTextServer {
 	public static void main(String[] args) {
 		try {
 			serverSocket = new ServerSocket(4444); // Server socket
- 
+			System.out.println("Server started. Listening to the port 4444");
 		} catch (IOException e) {
 			System.out.println("Could not listen on port: 4444");
 		}
- 
-		System.out.println("Server started. Listening to the port 4444");
+
 		try {
 			clientSocket = serverSocket.accept(); // accept the client connection
-			inputStreamReader = new InputStreamReader(clientSocket.getInputStream());
-		} catch (IOException ex) {
-			System.out.println("Problem in message reading1");
-		}
-		int i = 0;
+		} catch (IOException ex) {System.out.println("Problem in message reading");}
+		
+		// int i = 0;
 		while (true) {
 			System.out.println("Looping");
 			try {
-				
+
+				// clientSocket.getInputStream is the part where we actually
+				// read the socket. So we need to call this multiple times. 
+
+				inputStreamReader = new InputStreamReader(clientSocket.getInputStream());
 				bufferedReader = new BufferedReader(inputStreamReader); // get the client message
+				
+				// (Jeremy Nov.11.2014) It looks like the server is reading a 
+				// single line this is why when the client passes Yaw\nPitch\n 
+				// "Yaw" is the first line and hence it is only written.
+
 				message = bufferedReader.readLine();
- 
 				System.out.println(message);
- 
+
 			} catch (IOException ex) {
 				System.out.println("Problem in message reading2");
 			}
-			if (i >= 20) {
-				break;
-			} else {
-				i++;
-			}
+			// if (i >= 20) {
+			// 	break;
+			// } else {
+			// 	i++;
+			// }
 		}
 		try {
 			inputStreamReader.close();
