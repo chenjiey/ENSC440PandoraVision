@@ -1,9 +1,11 @@
 # Echo client program
 import socket
 import time
+import os
+
 
 HOST = '127.0.0.1'    # The remote host
-PORT = 8000           # The same port as used by the server
+PORT = int(os.environ.get("PORT", 8000)) # The same port as used by the server
 
 # WAIT_DURATION_IN_SECONDS = 1
 WAIT_DURATION_IN_SECONDS = 0.5

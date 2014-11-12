@@ -22,13 +22,14 @@ Description:
 """
 
 import socket  # socket is the socket library that allows for commuication
+import os
 
 # HOST = '' tells python we are going to look on all available addresses. 
 # Looking at all addresses implies that python looks at the localhost ip address
 # (127.0.0.1) and the address provided by a DHCP (192.168.X.Y) 
 
 HOST = ''
-PORT = 8000  # identifes what data we want
+PORT = int(os.environ.get("PORT", 8000))  # identifes what data we want
 
 # Initial Camera position upon a client successfully connecting to the server
 INITIAL_POSITION = 90
@@ -156,7 +157,10 @@ if __name__ == '__main__':
     # NOTE THAT CODE BEGINS HERE AND CALLS THE MAIN THREAD FROM WITHIN HERE
     while True:
 
-        print "Creating socket"
+        # hostname = socket.gethostname()
+        # IP = socket.gethostbyname(hostname)
+        # print "SERVER: THEORETICAL IP ADDRESS: %s" % IP 
+        print "SERVER: CREATING PORT: %s" % PORT
         
         # Create (instantiate) a socket and identify what type of socket to use
         #
