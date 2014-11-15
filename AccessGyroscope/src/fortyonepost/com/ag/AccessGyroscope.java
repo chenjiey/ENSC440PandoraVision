@@ -18,6 +18,7 @@ import java.net.UnknownHostException;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Process;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.view.View;
@@ -27,7 +28,9 @@ import android.widget.EditText;
 import android.widget.ToggleButton;
 import android.widget.CompoundButton;
 
+
 public class AccessGyroscope extends Activity implements SensorEventListener {
+	
 	//a TextView
 	private TextView tv;
 	//the Sensor Manager
@@ -53,6 +56,9 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 	int port = 0;
 	private String SERVER_IP1;
 	private boolean onOffToggle;
+	private Thread th;
+	public SendMsg sendmsg;
+	
 	
     /** Called when the activity is first created. */
     @Override
@@ -78,127 +84,31 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             	onOffToggle = isChecked;
 		        if (isChecked) {  
-	        	  	//messsage = textField.getText().toString(); // get the text message on the text field
-					//textField.setText(""); // Reset the text field to blank
-
 		        	/* 
 					This creates the class and executes the send message. 
 		        	*/
-					SendMessage sendMessageTask = new SendMessage();
-					sendMessageTask.execute();
-
+		        	System.out.println("STARTING A CONNECTION");
+		        	
+		        	String localserverIP = serverIP.getText().toString();
+		        	System.out.println(localserverIP);
+		        	
+		        	int localserverPort = Integer.parseInt(serverPort.getText().toString());
+		        	
+		        	System.out.println("INIT CONNECTION");
+		        	sendmsg = new SendMsg(localserverIP, localserverPort);
+		        	
+		        	System.out.println("CREATING THREAD");
+		        	th = new Thread(sendmsg);
+		        	System.out.println("STARTING THREAD");
+		        	th.start();
+		        	System.out.println("THREAD STARTED");
+		        	
 		        } else {
-		         	// raise an error message here
+		        	sendmsg.stop = true;
 		        }
             }
         });
     }
-    
-	private class SendMessage extends AsyncTask<Void, Void, Void> {
-		
-		
-//		protected void onPreExecute(){
-//			port = Integer.parseInt(serverPort.getText().toString());
-//			SERVER_IP1 = serverIP.getText().toString();
-//			
-//			// connect the client to the server
-//			try {
-//				System.out.println("STARTING SERVER");
-//				client = new Socket(SERVER_IP1, port);
-//			} catch (UnknownHostException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-		
-		/*
-		(Jeremy Nov.12.2014) Pretty sure I figured out why it is only sending
-		once. AsyncTask correctly creates a thread in the background which
-		calls doInBackground. doInBackground only runs once and hence you only
-		send data once. You basically need a while loop in there but you do
-		need to define entrance and exit functions for the thread.
-
-		The entrance function should initialize the connections.
-		The exit function should disconnect the connection.
-
-		You also need to properly exit the method there is a special function
-		call that allows you to do that and it still completes the exit function
-		afterwards.
-
-		entrance function: onPreExecute()
-		exit function: onPostExecute()
-
-		This is just a theory as I haven't gotten it working correctly yet.
-		*/
-
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			try {
-				/* 
-				(Jeremy Nov.11.2014) It looks like you are creating the
-				connection more than once. If we create a connection to the 
-				server twice even though a connection has previously been
-				established this could cause the error. I think this should
-				be moved into a contructor and stored 
-				*/
-
-				port = Integer.parseInt(serverPort.getText().toString());
-				SERVER_IP1 = serverIP.getText().toString();
-				
-				// connect the client to the server
-				client = new Socket(SERVER_IP1, port);
-
-				/* 
-				Once the socket is initialized you only need to run the
-				code below upon orientation update. There are a couple ways to
-				fix this I will try a few tomorrow. 
-
-				One method I'm pretty sure will
-				work but I don't like it because it removes the ability to run
-				in another thread like was done currently.
-				*/
-				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				System.out.println("ENTERING FUNCTION");
-				printwriter = new PrintWriter(client.getOutputStream(), true);
-				printwriter.write(messsage); // write the message to output stream
-				printwriter.flush();
-				printwriter.close();
-				// Client.close should be called at the end, so when you toggle
-				// the button off. This is causing your server thread to close
-				// which is why you cannot reconnect and you cannot receive any
-				// more data
-				
-				 client.close(); // close the connection
-	
-			} catch (UnknownHostException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-		
-//		@Override
-//		protected void onPostExecute(Void result) {
-//			try {
-//				System.out.println("CLOSING CONNECTION");
-//				client.close();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} // close the connection
-//		}
-	}
-    
     //when this Activity starts
     @Override
 	protected void onResume() 
@@ -264,6 +174,12 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 				   "Orientation Y (Pitch) :" + Float.toString(accMagOrientation[1]) +"\n" +
 				   "Orientation Z (Yaw) :" + Float.toString(accMagOrientation[2]));
 		
+//		try {
+//			sendmsg.queue.put("test");
+//		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		/*if (onOffToggle) {
 			SendMessage sendMessageTask = new SendMessage();
 			sendMessageTask.execute();
