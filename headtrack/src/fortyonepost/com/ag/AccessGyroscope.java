@@ -59,6 +59,10 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 	private Thread th;
 	public SendMsg sendmsg = null;
 	
+	private static final int MAX_RUN_AVG = 100;
+	private double[] runningAverage = new double[MAX_RUN_AVG];
+	private int arrayCnt = 0;
+	
 	
     /** Called when the activity is first created. */
     @Override
@@ -107,7 +111,19 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 		        	
 		        } else {
 		        	System.out.println("Toggle stop");
-		        	sendmsg.stop = true;
+		        	System.out.println("Cleraing the queue");
+		        	sendmsg.queue.clear();
+		        	System.out.println("Sending the shutdown command");
+		        	sendmsg.queue.offer("stop");
+//		        	sendmsg.stop = true;
+		        	System.out.println("Waiting for thread to stop");
+		        	try {
+						th.join();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		        	System.out.println("Thread has stopped!");
 		        }
             }
         });
@@ -168,12 +184,34 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 	        System.arraycopy(event.values, 0, magnet, 0, 3);
 	        break;
 	    }
-		 
-		tv.setText("Orientation X (Roll) :"+ Float.toString(accMagOrientation[0]) +"\n"+
-				   "Orientation Y (Pitch) :"+ Float.toString(accMagOrientation[1]) +"\n"+
-				   "Orientation Z (Yaw) :"+ Float.toString(accMagOrientation[2]));
+		/*
+		System.out.println(String.format("Adding: %f to running average", accMagOrientation[0]));
+		runningAverage[arrayCnt] = Math.toDegrees(accMagOrientation[0]); 
+		if (arrayCnt >= MAX_RUN_AVG) {
+			arrayCnt++;
+		} else {
+			arrayCnt = 0;
+		}
 
-		messsage = ("X:" + Float.toString(accMagOrientation[0]) + " Y:" + Float.toString(accMagOrientation[1]) +" Z :" + Float.toString(accMagOrientation[2]));
+		double sum = 0;
+		for (double d : runningAverage) {
+			sum += d;
+		}
+		double run_avg = sum / MAX_RUN_AVG;
+
+		System.out.println(String.format("runningAverage.length: %f", runningAverage.length));
+		System.out.println(String.format("run_avg: %f", run_avg));
+		*/
+		tv.setText(String.format(
+				"Orientation X (Yaw) :%f\n" + 
+				"Orientation Y (Roll) :%f\n" +
+				"Orientation Z (Pitch) :%f",
+				Math.toDegrees(accMagOrientation[1]), Math.toDegrees(accMagOrientation[1]), 
+				Math.toDegrees(accMagOrientation[2])));
+
+		messsage = String.format("(%.5f,%.5f)", 
+				Math.toDegrees(accMagOrientation[0]), 
+				Math.toDegrees(accMagOrientation[2]));
 
 		if (sendmsg == null) {
 			return;
@@ -183,16 +221,6 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 			System.out.println("Updatting queue");
 			sendmsg.queue.offer(messsage);
 		}
-//		try {
-//			sendmsg.queue.put("test");
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		/*if (onOffToggle) {
-			SendMessage sendMessageTask = new SendMessage();
-			sendMessageTask.execute();
-		}*/
 	}
 	
 	// calculates orientation angles from accelerometer and magnetometer output

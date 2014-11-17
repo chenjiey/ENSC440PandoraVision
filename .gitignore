@@ -2,8 +2,8 @@
 ## Eclipse
 #################
 
-AccessGyroscope/bin
-serverSocket/bin
+AccessGyroscope/bin/*
+serverSocket/bin/*
 
 *.pydevproject
 .project

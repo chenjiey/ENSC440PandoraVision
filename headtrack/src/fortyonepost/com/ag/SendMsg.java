@@ -45,67 +45,60 @@ public class SendMsg implements Runnable {
 	@Override
 	public void run() {
 		// Moves current thread into background
-		// android.os.Process.setPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-					String message = null;
-					stop = true;
+		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_DISPLAY);
+		String message = null;
 
-					PrintWriter printwriter = null;
-					
-					System.out.println("THREAD-2: HAS STARTED");
-					// connect the client to the server
-					try {
-						System.out.println("THREAD-2: TRYING TO CONNECT");
-						client = new Socket(ip, port);
-						
-						System.out.println("THREAD-2: HAS CONNECTED");
-						
-						printwriter = new PrintWriter(client.getOutputStream(), true);
-						
-					} catch (UnknownHostException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+		PrintWriter printwriter = null;
+		
+		System.out.println("THREAD-2: HAS STARTED");
+		// connect the client to the server
+		try {
+			System.out.println("THREAD-2: TRYING TO CONNECT");
+			client = new Socket(ip, port);
+			
+			System.out.println("THREAD-2: HAS CONNECTED");
+			
+			printwriter = new PrintWriter(client.getOutputStream(), true);
+			
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-					
-					while (stop) {
-						try {
-							message = queue.take();
-//							printwriter = new PrintWriter(client.getOutputStream(), true);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-//						} catch (IOException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
-						System.out.println("Received message");
-						System.out.println(message);					
-						System.out.println("Sending message to server");
+		
+		while (true) {
+			try {
+				message = queue.take();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (message == "stop") {
+				break;
+			}
+			System.out.println("Received message");
+			System.out.println(message);					
+			System.out.println("Sending message to server");
 
-						printwriter.write(message); // write the message to output stream
-						
-						System.out.println("Flushing the writer object");
-						printwriter.flush();
-						
-//						printwriter.close();
-					}
-//					printwriter.flush();
-					System.out.println("Closing the print writer");
-					printwriter.close();
-					
-					System.out.println("Exiting While loop");
-					
-					try {
-						System.out.println("Socket closed");
-						client.close();		
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+			printwriter.write(message); // write the message to output stream
+			
+			System.out.println("Flushing the writer object");
+			printwriter.flush();
+		}
+		System.out.println("Closing the print writer");
+		printwriter.close();
+		System.out.println("Exiting While loop");
+		
+		try {
+			System.out.println("Socket closed");
+			client.close();		
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	} //end of run()
 	
 }
