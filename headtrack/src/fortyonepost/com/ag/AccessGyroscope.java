@@ -16,6 +16,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
  
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Process;
@@ -60,6 +61,7 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 	public SendMsg sendmsg = null;
 	
 	private static final int MAX_RUN_AVG = 100;
+	public static final String EXTRA_MESSAGE = null;
 	private double[] runningAverage = new double[MAX_RUN_AVG];
 	private int arrayCnt = 0;
 	
@@ -229,4 +231,14 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 			SensorManager.getOrientation(rotationMatrix, accMagOrientation);
 		}
 	}
+	
+	/** Called when the user clicks the displayVideo button */
+	public void displayVideo(View view) {
+	    // Do something in response to button
+		Intent myintent = new Intent(this, videoStream.class);
+		final int result = 1;
+		myintent.putExtra(EXTRA_MESSAGE, "Hello This is my string");
+		startActivityForResult(myintent, result);
+	}
+	
 }
