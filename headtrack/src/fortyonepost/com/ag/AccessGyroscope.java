@@ -206,10 +206,10 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 				"Orientation X (Yaw) :%f\n" + 
 				"Orientation Y (Roll) :%f\n" +
 				"Orientation Z (Pitch) :%f",
-				Math.toDegrees(accMagOrientation[1]), Math.toDegrees(accMagOrientation[1]), 
+				Math.toDegrees(accMagOrientation[0]), Math.toDegrees(accMagOrientation[1]), 
 				Math.toDegrees(accMagOrientation[2])));
 
-		messsage = String.format("(%.5f,%.5f)", 
+		messsage = String.format("%.5f,%.5f", 
 				Math.toDegrees(accMagOrientation[0]), 
 				Math.toDegrees(accMagOrientation[2]));
 
