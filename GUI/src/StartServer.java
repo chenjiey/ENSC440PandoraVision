@@ -17,7 +17,8 @@ public class StartServer implements Runnable {
 	public int port, rem_port;
 	public String ip;
 	
-	public String rem_server = "127.0.0.1";
+//	public String rem_server = "127.0.0.1";
+	public String rem_server = "192.168.1.5";
 	public static int thread_cnt = 1;
 	
 	public Socket producer;
@@ -45,7 +46,7 @@ public class StartServer implements Runnable {
 	
 	public void run() {
 
-		updateGUI("test");
+//		updateGUI("test");
 		
 		System.out.printf("Starting server on port: %d\n", port);
 		String data = null;
@@ -106,11 +107,14 @@ public class StartServer implements Runnable {
 				System.out.printf(
 					"%s:Error: Failed to create an input buffer\n", name);
 			}
+
+			String[] datas = data.split(",");
+			
 			
 			if (data == null)
 				break;
-			System.out.println("Received Data: " + data);
-			printwriter.write(data); // write the message to output stream
+			System.out.println("Received Data: " + datas[0]);
+			printwriter.write(datas[0]); // write the message to output stream
 			printwriter.flush();
 		}
 
