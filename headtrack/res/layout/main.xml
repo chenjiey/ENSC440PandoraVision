@@ -47,8 +47,14 @@
 		<Button
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:text="video"
+		    android:text="oneVideo"
 		    android:onClick="displayVideo" />
+		
+		<Button
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="twoVideo"
+		    android:onClick="displayTwoVideo" />
     
 	</LinearLayout>
 </LinearLayout>

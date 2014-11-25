@@ -241,4 +241,13 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 		startActivityForResult(myintent, result);
 	}
 	
+	/** Called when the user clicks the displayTwoVideo button */
+	public void displayTwoVideo(View view) {
+	    // Do something in response to button
+		Intent myintent = new Intent(this, twoVideo_screen.class);
+		final int result = 1;
+		myintent.putExtra(EXTRA_MESSAGE, "Hello This is my string2");
+		startActivityForResult(myintent, result);
+	}
+	
 }

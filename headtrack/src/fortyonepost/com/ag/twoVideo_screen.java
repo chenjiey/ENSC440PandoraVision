@@ -8,13 +8,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-public class videoStream extends Activity{
+public class twoVideo_screen extends Activity{
 
-	private TextView fromMainMsg;
+	//private TextView fromMainMsg;
 	
 	@SuppressLint({ "InlinedApi", "NewApi" }) @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +22,7 @@ public class videoStream extends Activity{
 		 requestWindowFeature(Window.FEATURE_NO_TITLE);
 	     getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
 	                                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		setContentView(R.layout.video_screen);
+		setContentView(R.layout.twovideo_screen);
 		
 		View decorView = getWindow().getDecorView();
 		// Hide both the navigation bar and the status bar.
@@ -41,11 +40,21 @@ public class videoStream extends Activity{
 //		System.out.println("Print recieved msg from main activity:" + fromMainActivity);
 //		fromMainMsg.setText(fromMainActivity);
 		
-		VideoView myVideoView = (VideoView) findViewById(R.id.myVideo);
-		//MediaController myMediaController = new MediaController(this);
-		Uri video = Uri.parse("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
-		myVideoView.setVideoURI(video);
-		myVideoView.start();
+//		VideoView myVideoView = (VideoView) findViewById(R.id.myVideoTwo1);
+//		//MediaController myMediaController = new MediaController(this);
+//		Uri video = Uri.parse("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
+//		myVideoView.setVideoURI(video);
+//		System.out.println("first video started.");
+//		myVideoView.start();
+//		System.out.println("first video ended.");
+//		
+//		VideoView myVideoView2 = (VideoView) findViewById(R.id.myVideoTwo2);
+//		Uri video2 = Uri.parse("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
+//		myVideoView2.setVideoURI(video2);
+//		System.out.println("second video started.");
+//		myVideoView2.start();
+		
+		
 	}
 	
 

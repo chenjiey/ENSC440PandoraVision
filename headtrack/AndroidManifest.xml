@@ -26,6 +26,11 @@
             	  android:label="sencondscreen"
             	  android:screenOrientation="landscape">
         </activity>
+        
+        <activity android:name=".twoVideo_screen"
+            	  android:label="thirdscreen"
+            	  android:screenOrientation="landscape">
+        </activity>
 
     </application>
 </manifest>
