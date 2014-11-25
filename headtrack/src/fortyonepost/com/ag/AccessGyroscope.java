@@ -24,6 +24,7 @@ import java.util.Collection;
 import org.apache.http.client.CircularRedirectException;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Process;
@@ -67,22 +68,10 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 	private Thread th;
 	public SendMsg sendmsg = null;
 	
-	
-	private static final int THRESH_HOLD = 10;
-	
-	private double runAvg = 0;
-	
-	private static final int DEFAULT = 0;
-	private static final int RUN_AVG = 1;
-	private static final int ARR = 2;
-	private static final int SENSOR = RUN_AVG;
-	
-	private static final int MAX_ARR = 100000;
-	private static int arrCnt = 0;
-	private static double[] runAvgArr = new double[MAX_ARR];
-	
-	private ArrayList<Double> expAvg = new ArrayList<Double>(10);
-	
+	private static final int MAX_RUN_AVG = 100;
+	public static final String EXTRA_MESSAGE = null;
+	private double[] runningAverage = new double[MAX_RUN_AVG];
+	private int arrayCnt = 0;	
 	
     /** Called when the activity is first created. */
     @Override
@@ -283,4 +272,22 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 		java.util.Collections.rotate(circ_buf, 1);
 		return sum;
 	}
+	/** Called when the user clicks the displayVideo button */
+	public void displayVideo(View view) {
+	    // Do something in response to button
+		Intent myintent = new Intent(this, videoStream.class);
+		final int result = 1;
+		myintent.putExtra(EXTRA_MESSAGE, "Hello This is my string");
+		startActivityForResult(myintent, result);
+	}
+	
+	/** Called when the user clicks the displayTwoVideo button */
+	public void displayTwoVideo(View view) {
+	    // Do something in response to button
+		Intent myintent = new Intent(this, twoVideo_screen.class);
+		final int result = 1;
+		myintent.putExtra(EXTRA_MESSAGE, "Hello This is my string2");
+		startActivityForResult(myintent, result);
+	}
+	
 }
