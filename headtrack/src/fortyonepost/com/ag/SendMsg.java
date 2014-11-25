@@ -26,12 +26,19 @@ public class SendMsg implements Runnable {
 	public int port;
 	public Socket client;
 	public BlockingQueue<String> queue = null;
+//	public BlockingQueue<Integer> queue = null;
+	
+	public final int FAIL = -1;
+	public final int SUCCESS = 0;
+	public final int CONNECTING = 1;
+	public final int CONNECTED = 2;
+	public final int RUNNING = 3;
+	public int state = SUCCESS;
 	/**
 	 * 
 	 */
 	public SendMsg(String server_ip, int server_port) {
 		// TODO Auto-generated constructor stub
-//		BlockingQueue<String> orientation_data = queue;
 		// connect to port
 		port = server_port;
 		ip = server_ip;
@@ -40,6 +47,7 @@ public class SendMsg implements Runnable {
 		System.out.println(port);
 		System.out.println("Creating Queue");
 		queue = new ArrayBlockingQueue<String>(5);
+//		queue = new ArrayBlockingQueue<Integer>(5);
 	}
 
 	@Override
@@ -47,13 +55,14 @@ public class SendMsg implements Runnable {
 		// Moves current thread into background
 		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_DISPLAY);
 		String message = null;
-
+//		int message = 0;
+		
 		PrintWriter printwriter = null;
 		
 		System.out.println("THREAD-2: HAS STARTED");
 		// connect the client to the server
 		try {
-			System.out.println("THREAD-2: TRYING TO CONNECT");
+			System.out.printf("THREAD-2: CONNECTING TO: %s:%d\n", ip, port);
 			client = new Socket(ip, port);
 			
 			System.out.println("THREAD-2: HAS CONNECTED");
@@ -63,11 +72,18 @@ public class SendMsg implements Runnable {
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			this.state = this.FAIL;
+			System.out.printf("ERROR: Failed to connect to the server");
+			return;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			this.state = this.FAIL;
+			System.out.printf("ERROR: Failed to create Printwrtier");
+			return;
 		}
-
+		
+		this.state = this.CONNECTED;
 		
 		while (true) {
 			try {
@@ -75,10 +91,14 @@ public class SendMsg implements Runnable {
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				return;
 			}
 			if (message == "stop") {
 				break;
 			}
+//			if (message == -1) {
+//				break;
+//			}
 			System.out.println("Received message");
 			System.out.println(message);					
 			System.out.println("Sending message to server");
@@ -99,6 +119,8 @@ public class SendMsg implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		this.state = this.SUCCESS;
 	} //end of run()
 	
 }

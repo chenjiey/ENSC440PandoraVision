@@ -32,8 +32,7 @@ public class twoVideo_screen extends Activity{
 		int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 		              | View.SYSTEM_UI_FLAG_FULLSCREEN;
 		decorView.setSystemUiVisibility(uiOptions);
-		
-		
+
 		Intent activityThatcalled = getIntent();
 //		String fromMainActivity = activityThatcalled.getStringExtra(AccessGyroscope.EXTRA_MESSAGE);
 //		fromMainMsg = (TextView) findViewById(R.id.fromMain);

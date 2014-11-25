@@ -65,13 +65,21 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 	int port = 0;
 	private String SERVER_IP1;
 	private boolean onOffToggle;
+	
+	private boolean thread_running = false;
 	private Thread th;
 	public SendMsg sendmsg = null;
+	
+	private static final int RUN_AVG = 0;
+	private static final int DEFAULT = 1;
+	private int SENSOR = RUN_AVG;
 	
 	private static final int MAX_RUN_AVG = 100;
 	public static final String EXTRA_MESSAGE = null;
 	private double[] runningAverage = new double[MAX_RUN_AVG];
-	private int arrayCnt = 0;	
+	private int arrayCnt = 0;
+	private double runAvg = 0;
+	private double[] runAvgArr = new double[MAX_RUN_AVG];
 	
     /** Called when the activity is first created. */
     @Override
@@ -91,51 +99,14 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
         //get a hook to the sensor service
         sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         initListeners();
-        
+
      // Button press event listener
         toggleButton1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            	onOffToggle = isChecked;
-		        if (isChecked) {  
-		        	/* 
-					This creates the class and executes the send message. 
-		        	*/
-		        	
-		        	System.out.println("STARTING A CONNECTION");
-		        	
-		        	String localserverIP = serverIP.getText().toString();
-		        	System.out.println(localserverIP);
-		        	
-		        	int localserverPort = Integer.parseInt(serverPort.getText().toString());
-		        	
-		        	System.out.println("INIT CONNECTION");
-		        	sendmsg = new SendMsg(localserverIP, localserverPort);
-		        	
-		        	System.out.println("CREATING THREAD");
-		        	th = new Thread(sendmsg);
-		        	System.out.println("STARTING THREAD");
-		        	th.start();
-		        	System.out.println("THREAD STARTED");
-		        	
-		        	
-		        } else {
-		        	System.out.println("Toggle stop");
-		        	System.out.println("Cleraing the queue");
-		        	sendmsg.queue.clear();
-		        	System.out.println("Sending the shutdown command");
-		        	sendmsg.queue.offer("stop");
-//		        	sendmsg.stop = true;
-		        	System.out.println("Waiting for thread to stop");
-		        	try {
-						th.join();
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-		        	System.out.println("Thread has stopped!");
-		        }
+        		startSendingMessages(buttonView, isChecked);
+        		}
             }
-        });
+        );
     }
     //when this Activity starts
     @Override
@@ -191,6 +162,9 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 	        break;
 	    }
 		
+		/* (Jeremy) Nov 23: I was playing around with different ways of averaging
+		 * the output. I'm pretty convinced that we need to mix this with the 
+		 * Sensor Fusion algorithm*/
 		switch (SENSOR) {
 		case RUN_AVG:
 			runAvg = calculateRunAvg(Math.toDegrees(accMagOrientation[0]), runAvg, 180);
@@ -212,17 +186,20 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 				(int) runAvg, (int) Math.toDegrees(accMagOrientation[1]), 
 				(int) Math.toDegrees(accMagOrientation[2]) + 180));
 
-		messsage = String.format("%.5f,%.5f", 
-				Math.toDegrees(accMagOrientation[0]), 
-				Math.toDegrees(accMagOrientation[2]));
-
+//		messsage = String.format("%d,%d", 
+//				(int) Math.toDegrees(accMagOrientation[0]), 
+//				(int) Math.toDegrees(accMagOrientation[2]));
+		messsage = String.format("%d\n", (int) runAvg);
+//		messsage = (int) runAvg;
+		
 		if (sendmsg == null) {
-			return;
+			return; // if send message hasn't been initialized don't send
 		}
 
 		if (onOffToggle) {
-			System.out.println("Updatting queue");
+//			System.out.println("Updatting queue");
 			sendmsg.queue.offer(messsage);
+//			sendmsg.queue.offer((int) runAvg);
 		}
 	}
 	
@@ -245,11 +222,10 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 	 * 
 	 * */
 		int sum = 0;
-		
-		runAvgArr[arrCnt] = cur_val;
-		arrCnt++;
-		if (arrCnt > runAvg) {
-			arrCnt = 0;
+		runAvgArr[arrayCnt] = cur_val;
+		arrayCnt++;
+		if (arrayCnt > runAvg) {
+			arrayCnt = 0;
 		}
 		
 		for (int i = 0; i < runAvgArr.length; i++) {
@@ -258,7 +234,6 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 		return sum / runAvgArr.length;
 	}
 
-	
 	private double calcExpAvg(ArrayList<Double> circ_buf, double cur_val) {
 		double sum = 0;	
 
@@ -290,4 +265,62 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 		startActivityForResult(myintent, result);
 	}
 	
+	/*	This creates the class and executes the send message.	*/
+	public void startSendingMessages(CompoundButton buttonView, boolean isChecked) {
+		onOffToggle = isChecked;
+        if (isChecked) {
+        	
+        	/* look for any errors that can cause the app to crash */
+        	if (serverPort.getText().toString().matches("")) {
+        		System.out.printf("Found the server port to be empty\n");
+        		return;
+        	} else if (serverIP.getText().toString().matches("")) {
+        		System.out.printf("ERROR: Found serverIP to be empty\n");
+        		return;
+        	} else if (this.sendmsg != null && this.sendmsg.state != this.sendmsg.SUCCESS) { 
+        		System.out.printf(
+        			"ERROR: If sendmsg has been run before expected state to be success\n");
+        	} else if (this.thread_running == true) {
+        		System.out.printf("THREAD-1: THREAD-2 already created");
+        		return;
+        	} else {
+        		System.out.printf("THREAD-1: All checks are verified");
+        	}
+        	
+        	String localserverIP = serverIP.getText().toString();
+        	int localserverPort = Integer.parseInt(serverPort.getText().toString());
+
+        	sendmsg = new SendMsg(localserverIP, localserverPort);
+
+        	System.out.println("THREAD-1: CREATING NEW THREAD-2");
+        	th = new Thread(sendmsg);
+        	th.start();
+        	System.out.println("THREAD-1: STARTING NEW THREAD-2");
+        	this.thread_running = true;
+        	
+        } else {
+        	if (sendmsg == null) {
+        		System.out.printf("THREAD-1: Sendmsg not started\n");
+        		return;
+        	} else if (this.sendmsg.state != this.sendmsg.CONNECTED) {
+        		System.out.printf("THREAD-1: Sendmsg not connected\n");
+        		return;
+        	}
+        	
+        	System.out.println("THREAD-1: Sending the shutdown command");
+        	sendmsg.queue.clear();
+        	sendmsg.queue.offer("stop");
+//        	sendmsg.queue.offer(-1);
+
+        	System.out.println("THREAD-1: Waiting for thread to stop");
+        	try {
+				th.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	System.out.println("THREAD-1: Thread has Stopped Cleanly!");
+        	this.thread_running = false;
+        }
+    }
 }
