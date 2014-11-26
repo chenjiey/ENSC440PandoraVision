@@ -59,7 +59,7 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
     
 	private Socket client;
 	private PrintWriter printwriter;
-	private EditText serverIP, serverPort;
+	private EditText serverIP, serverPort, oneVideo, twoVideo1, twoVideo2;
 	private ToggleButton toggleButton1;
 	private String messsage;
 	int port = 0;
@@ -76,10 +76,13 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 	
 	private static final int MAX_RUN_AVG = 100;
 	public static final String EXTRA_MESSAGE = null;
+	public static final String EXTRA_MESSAGE2 = null;
+	public static final String EXTRA_MESSAGE3 = null;
 	private double[] runningAverage = new double[MAX_RUN_AVG];
 	private int arrayCnt = 0;
 	private double runAvg = 0;
 	private double[] runAvgArr = new double[MAX_RUN_AVG];
+	private String videoURL = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
 	
     /** Called when the activity is first created. */
     @Override
@@ -91,7 +94,9 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
         //get the TextView from the layout file
         tv = (TextView) findViewById(R.id.tv);
         
-       // textField = (EditText) findViewById(R.id.editText1); // reference to the text field
+        oneVideo = (EditText) findViewById(R.id.oneVideoLink); // reference to the text field
+        twoVideo1 = (EditText) findViewById(R.id.twoVideoLink1); // reference to the text field
+        twoVideo2 = (EditText) findViewById(R.id.twoVideoLink2); // reference to the text field
         serverIP = (EditText) findViewById(R.id.editText2); // reference to the text field
         serverPort = (EditText) findViewById(R.id.editText3); // reference to the text field
         toggleButton1 = (ToggleButton) findViewById(R.id.toggleButton1); // reference to the send button
@@ -250,18 +255,44 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 	/** Called when the user clicks the displayVideo button */
 	public void displayVideo(View view) {
 	    // Do something in response to button
+		//Link to another activity
 		Intent myintent = new Intent(this, videoStream.class);
 		final int result = 1;
-		myintent.putExtra(EXTRA_MESSAGE, "Hello This is my string");
+		String sendURL = null;
+		// If user doesn't enter any URL, use the default URL
+		if (oneVideo.getText().toString().matches("")) {
+			sendURL = videoURL;	
+		} else {
+			sendURL = oneVideo.getText().toString();
+		}
+
+		myintent.putExtra(EXTRA_MESSAGE, sendURL);
 		startActivityForResult(myintent, result);
 	}
 	
 	/** Called when the user clicks the displayTwoVideo button */
 	public void displayTwoVideo(View view) {
 	    // Do something in response to button
+		//Link to another activity
 		Intent myintent = new Intent(this, twoVideo_screen.class);
 		final int result = 1;
-		myintent.putExtra(EXTRA_MESSAGE, "Hello This is my string2");
+		String sendURL = null;
+		String sendURL2 = null;
+		// If user doesn't enter any URL, use the default URL
+		if (twoVideo1.getText().toString().matches("")) {
+			sendURL = videoURL;	
+		} else {
+			sendURL = twoVideo1.getText().toString();
+		}
+		
+		if (twoVideo2.getText().toString().matches("")) {
+			sendURL2 = videoURL;	
+		} else {
+			sendURL2 = twoVideo2.getText().toString();
+		}
+		
+		myintent.putExtra(EXTRA_MESSAGE2, sendURL);
+		myintent.putExtra(EXTRA_MESSAGE3, sendURL2);
 		startActivityForResult(myintent, result);
 	}
 	

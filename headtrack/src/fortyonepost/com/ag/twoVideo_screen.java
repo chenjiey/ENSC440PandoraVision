@@ -5,14 +5,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-public class twoVideo_screen extends Activity{
+public class twoVideo_screen extends FragmentActivity{
 
+	public String URLString1 = null;
+	public String URLString2 = null;
 	//private TextView fromMainMsg;
 	
 	@SuppressLint({ "InlinedApi", "NewApi" }) @Override
@@ -32,29 +36,15 @@ public class twoVideo_screen extends Activity{
 		int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 		              | View.SYSTEM_UI_FLAG_FULLSCREEN;
 		decorView.setSystemUiVisibility(uiOptions);
-
+		//Use intent get data from main activity
 		Intent activityThatcalled = getIntent();
-//		String fromMainActivity = activityThatcalled.getStringExtra(AccessGyroscope.EXTRA_MESSAGE);
-//		fromMainMsg = (TextView) findViewById(R.id.fromMain);
-//		System.out.println("Print recieved msg from main activity:" + fromMainActivity);
-//		fromMainMsg.setText(fromMainActivity);
-		
-//		VideoView myVideoView = (VideoView) findViewById(R.id.myVideoTwo1);
-//		//MediaController myMediaController = new MediaController(this);
-//		Uri video = Uri.parse("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
-//		myVideoView.setVideoURI(video);
-//		System.out.println("first video started.");
-//		myVideoView.start();
-//		System.out.println("first video ended.");
-//		
-//		VideoView myVideoView2 = (VideoView) findViewById(R.id.myVideoTwo2);
-//		Uri video2 = Uri.parse("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
-//		myVideoView2.setVideoURI(video2);
-//		System.out.println("second video started.");
-//		myVideoView2.start();
-		
-		
+		URLString1 = activityThatcalled.getStringExtra(AccessGyroscope.EXTRA_MESSAGE2);	
+		URLString2 = activityThatcalled.getStringExtra(AccessGyroscope.EXTRA_MESSAGE3);
+		//Debug what is received
+		System.out.println("from main activity");
+		System.out.println(URLString1);
+		System.out.println(URLString2);
 	}
-	
 
+	
 }

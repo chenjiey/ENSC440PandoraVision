@@ -36,14 +36,14 @@ public class videoStream extends Activity{
 		
 		
 		Intent activityThatcalled = getIntent();
-//		String fromMainActivity = activityThatcalled.getStringExtra(AccessGyroscope.EXTRA_MESSAGE);
+		String fromMainActivity = activityThatcalled.getStringExtra(AccessGyroscope.EXTRA_MESSAGE);
 //		fromMainMsg = (TextView) findViewById(R.id.fromMain);
 //		System.out.println("Print recieved msg from main activity:" + fromMainActivity);
 //		fromMainMsg.setText(fromMainActivity);
 		
 		VideoView myVideoView = (VideoView) findViewById(R.id.myVideo);
 		//MediaController myMediaController = new MediaController(this);
-		Uri video = Uri.parse("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
+		Uri video = Uri.parse(fromMainActivity);
 		myVideoView.setVideoURI(video);
 		myVideoView.start();
 	}

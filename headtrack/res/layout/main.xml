@@ -30,13 +30,6 @@
         	android:hint="Port:"
         	android:inputType="number"
         	android:ems="10" />
-        
-    	<EditText
-        	android:id="@+id/editText1"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:hint="Message content:"
-        	android:ems="10" />
     		
     	<ToggleButton
     	    android:id="@+id/toggleButton1"
@@ -44,11 +37,32 @@
         	android:layout_height="wrap_content"
         	android:text="ToggleButton"/>
     	
+		<EditText
+        	android:id="@+id/oneVideoLink"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:hint="Video Link:"
+        	android:ems="10" />
+    	    	
 		<Button
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:text="oneVideo"
 		    android:onClick="displayVideo" />
+		
+		<EditText
+        	android:id="@+id/twoVideoLink1"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:hint="Video Link1:"
+        	android:ems="10" />
+		
+		<EditText
+        	android:id="@+id/twoVideoLink2"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:hint="Video Link2:"
+        	android:ems="10" />
 		
 		<Button
 		    android:layout_width="wrap_content"

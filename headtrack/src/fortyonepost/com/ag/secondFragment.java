@@ -12,7 +12,7 @@ import android.widget.VideoView;
 @SuppressLint("NewApi") public class secondFragment extends Fragment{
 	
 	VideoView myVideoView;
-	
+	private String URL2;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -29,7 +29,16 @@ import android.widget.VideoView;
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		//MediaController myMediaController = new MediaController(this);
-		Uri video = Uri.parse("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
+		
+		//Get URL from fragment activity
+		twoVideo_screen mydata = (twoVideo_screen)getActivity();
+		URL2 = mydata.URLString2;
+		//Debug what is received
+		System.out.println("second frag URL:");
+		System.out.println(URL2);
+		
+		//parse url and play video
+		Uri video = Uri.parse(URL2);
 		myVideoView.setVideoURI(video);
 		System.out.println("second video started.");
 		myVideoView.start();

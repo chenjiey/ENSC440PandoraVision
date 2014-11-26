@@ -10,15 +10,16 @@ import android.widget.VideoView;
 
 public class firstFragment extends Fragment{
 	
-	VideoView myVideoView;
+	private VideoView myVideoView;
+	private String URL1;
 	
+//	private String URL1="default for testing purpose";
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		View view = inflater.inflate(R.layout.firstfragment, container, false);
-		
-		myVideoView = (VideoView) view.findViewById(R.id.firstfrag);
+		View view = inflater.inflate(R.layout.firstfragment, container, false);	
+		myVideoView = (VideoView) view.findViewById(R.id.firstfrag);		
 		
 		return view;
 	}
@@ -27,13 +28,18 @@ public class firstFragment extends Fragment{
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
+		//Get URL from fragment activity
+		twoVideo_screen mydata = (twoVideo_screen)getActivity();
+		URL1 = mydata.URLString1;
+		//Debug what is received
+		System.out.println("first frag URL:");
+		System.out.println(URL1);
 		
-		//MediaController myMediaController = new MediaController(this);
-		Uri video = Uri.parse("rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov");
+		//parse url and play video
+		Uri video = Uri.parse(URL1);
 		myVideoView.setVideoURI(video);
 		System.out.println("first video started.");
 		myVideoView.start();
 	}
-
 	
 }

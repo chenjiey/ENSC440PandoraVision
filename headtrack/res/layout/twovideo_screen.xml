@@ -39,11 +39,11 @@
 		android:id="@+id/myVideoTwo2"/> -->
 		
 		<fragment
+		    android:name="fortyonepost.com.ag.firstFragment"
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
 		    android:id="@+id/myVideoTwo1"
-		    android:layout_weight="1"
-		    class="fortyonepost.com.ag.firstFragment"/>
+		    android:layout_weight="1"/>
 		
 		<fragment
 		    android:layout_width="match_parent"
