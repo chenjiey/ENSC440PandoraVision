@@ -194,7 +194,7 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 //		messsage = String.format("%d,%d", 
 //				(int) Math.toDegrees(accMagOrientation[0]), 
 //				(int) Math.toDegrees(accMagOrientation[2]));
-		messsage = String.format("%d,%d", (int) runAvg, ((int) Math.toDegrees(accMagOrientation[2]) + 180));
+		messsage = String.format("%d,%d\n", (int) runAvg, ((int) Math.toDegrees(accMagOrientation[2]) + 180));
 //		messsage = (int) runAvg;
 		
 		if (sendmsg == null) {
