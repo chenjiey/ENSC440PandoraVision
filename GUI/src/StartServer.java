@@ -18,8 +18,8 @@ public class StartServer implements Runnable {
 	public String ip;
 	
 //	public String rem_server = "127.0.0.1";
-	public String rem_server1 = "192.168.1.5"; //rpi1
-	public String rem_server2 = "192.168.1.5"; //rpi2
+	public String rem_server1 = "127.0.0.1"; //rpi1
+	public String rem_server2 = "127.0.0.1"; //rpi2
 	public static int thread_cnt = 1;
 	
 	public Socket producer1, producer2;
@@ -59,8 +59,10 @@ public class StartServer implements Runnable {
 		producer2 = null;
 		
 		try {
+			System.out.println("I am the client1");
 			producer1 = new Socket(rem_server1, rem_port); //client socket for the raspberry pi
 			printwriter1 = new PrintWriter(producer1.getOutputStream(), true);
+			System.out.println("I am the client1 connected");
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 //			e.printStackTrace();
@@ -77,8 +79,10 @@ public class StartServer implements Runnable {
 			return;
 
 		try {
-			producer2 = new Socket(rem_server2, rem_port); //client socket for the raspberry pi
+			System.out.println("I am the client2");
+			producer2 = new Socket(rem_server2, 8002); //client socket for the raspberry pi
 			printwriter2 = new PrintWriter(producer2.getOutputStream(), true);
+			System.out.println("I am the client2 connected");
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 //			e.printStackTrace();
@@ -96,12 +100,14 @@ public class StartServer implements Runnable {
 
 		//server socket for the android app		
 		try {
+			System.out.println("I am the app server");
 			server = new ServerSocket(port); 
 		} catch (IOException e1) {
 			  System.out.printf("%s:Error: Tried to create server but failed\n", name);
 		}
 		try {
 			client = server.accept();
+			System.out.println("I got the client connection");
 		} catch (IOException e1) {
 			  System.out.printf(
 				  "%s:Error: Error tried to connect to server but failed\n", name);
@@ -109,11 +115,13 @@ public class StartServer implements Runnable {
 
 		
 		while (true) {
-
+			
 			InputStreamReader in_stream;
 			try {
+				System.out.println("I am reading the app data");
 				in_stream = new InputStreamReader(client.getInputStream());
 				in = new BufferedReader(in_stream);
+				
 			} catch (IOException e) {
 			
 				e.printStackTrace();
@@ -122,7 +130,9 @@ public class StartServer implements Runnable {
 			}
 			
 			try {
+				System.out.println("Reading the app data with comma");
 				data = in.readLine();
+				System.out.println("done reading the app data");
 			} catch (IOException e) {
 				
 				e.printStackTrace();
@@ -135,8 +145,8 @@ public class StartServer implements Runnable {
 			
 			if (data == null)
 				break;
-			System.out.println("Received Data: " + datas[0]);
-			System.out.println("Received Data: " + datas[1]);
+			System.out.println("Received Data1: " + datas[0]);
+			System.out.println("Received Data2: " + datas[1]);
 			printwriter1.write(datas[0]); // write the message to output stream
 			printwriter2.write(datas[1]);
 			printwriter1.flush();
@@ -158,6 +168,11 @@ public class StartServer implements Runnable {
 		}
 		try {
 			producer1.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
 			producer2.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
