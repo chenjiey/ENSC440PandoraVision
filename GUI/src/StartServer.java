@@ -18,10 +18,11 @@ public class StartServer implements Runnable {
 	public String ip;
 	
 //	public String rem_server = "127.0.0.1";
-	public String rem_server = "192.168.1.5";
+	public String rem_server1 = "192.168.1.5"; //rpi1
+	public String rem_server2 = "192.168.1.5"; //rpi2
 	public static int thread_cnt = 1;
 	
-	public Socket producer;
+	public Socket producer1, producer2;
 	
 	public StartServer(int local_port, int remote_port) {
 		
@@ -51,30 +52,51 @@ public class StartServer implements Runnable {
 		System.out.printf("Starting server on port: %d\n", port);
 		String data = null;
 		Socket client = null;
-		PrintWriter printwriter = null;
+		PrintWriter printwriter1 = null;
+		PrintWriter printwriter2 = null;
 		BufferedReader in = null;
-		producer = null;
+		producer1 = null;
+		producer2 = null;
 		
 		try {
-			producer = new Socket(rem_server, rem_port);
-			printwriter = new PrintWriter(producer.getOutputStream(), true);
+			producer1 = new Socket(rem_server1, rem_port); //client socket for the raspberry pi
+			printwriter1 = new PrintWriter(producer1.getOutputStream(), true);
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 //			e.printStackTrace();
 			System.out.printf(
-				"%s:ERROR: Failed to connecto to server: %s:%d\n", name, rem_server, rem_port);
+				"%s:ERROR: Failed to connecto to server: %s:%d\n", name, rem_server1, rem_port);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 //			e.printStackTrace();
 			System.out.printf(
-				"%s:ERROR: Failed to connecto to server: %s:%d\n", name, rem_server, rem_port);
+				"%s:ERROR: Failed to connecto to server: %s:%d\n", name, rem_server1, rem_port);
 		}
 
-		if (producer == null)
+		if (producer1 == null)
 			return;
 
 		try {
-			server = new ServerSocket(port);
+			producer2 = new Socket(rem_server2, rem_port); //client socket for the raspberry pi
+			printwriter2 = new PrintWriter(producer2.getOutputStream(), true);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+//			e.printStackTrace();
+			System.out.printf(
+				"%s:ERROR: Failed to connecto to server: %s:%d\n", name, rem_server1, rem_port);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+//			e.printStackTrace();
+			System.out.printf(
+				"%s:ERROR: Failed to connecto to server: %s:%d\n", name, rem_server1, rem_port);
+		}
+
+		if (producer2 == null)
+			return;
+
+		//server socket for the android app		
+		try {
+			server = new ServerSocket(port); 
 		} catch (IOException e1) {
 			  System.out.printf("%s:Error: Tried to create server but failed\n", name);
 		}
@@ -93,7 +115,7 @@ public class StartServer implements Runnable {
 				in_stream = new InputStreamReader(client.getInputStream());
 				in = new BufferedReader(in_stream);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			
 				e.printStackTrace();
 				System.out.printf(
 					"%s:Error: Failed to get input stream from socket\n", name);
@@ -102,7 +124,7 @@ public class StartServer implements Runnable {
 			try {
 				data = in.readLine();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 				System.out.printf(
 					"%s:Error: Failed to create an input buffer\n", name);
@@ -114,8 +136,11 @@ public class StartServer implements Runnable {
 			if (data == null)
 				break;
 			System.out.println("Received Data: " + datas[0]);
-			printwriter.write(datas[0]); // write the message to output stream
-			printwriter.flush();
+			System.out.println("Received Data: " + datas[1]);
+			printwriter1.write(datas[0]); // write the message to output stream
+			printwriter2.write(datas[1]);
+			printwriter1.flush();
+			printwriter2.flush();
 		}
 
 		System.out.println("Shutting down the server");
@@ -132,7 +157,8 @@ public class StartServer implements Runnable {
 			e.printStackTrace();
 		}
 		try {
-			producer.close();
+			producer1.close();
+			producer2.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
