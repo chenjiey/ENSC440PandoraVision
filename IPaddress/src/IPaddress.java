@@ -1,72 +1,98 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class IPaddress {
 	
-	public String test_server1 = "127.0.0.1"; 
-	public String test_server2 = "127.0.0.1"; 
-	public String test_server3 = "127.0.0.1"; 
-	public String test_server4 = "127.0.0.1"; 
-	public String test_server5 = "127.0.0.1"; 
-	public String test_server6 = "127.0.0.1"; 
-	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
+		int port = 8000;
 		try {
 			
 			String MyIpAddress = InetAddress.getLocalHost().getHostAddress();
 			System.out.print("My IPaddress is :" +MyIpAddress);
+			int IpAddrLength = MyIpAddress.length();
+			String TestIpAddress = MyIpAddress;
 			
+			for (int i=1;i<256; i++){
+				if(TestIpAddress.length() >IpAddrLength){
+					TestIpAddress = TestIpAddress.substring(0, IpAddrLength-2) ;
+				}
+				TestIpAddress = TestIpAddress.substring(0, IpAddrLength-2) + i ;
+				
+				System.out.print(" \nNew IPaddress is :" +TestIpAddress);
+				StartServer("TestIpAddress", port);
+			}
 			
 		} catch (UnknownHostException e) {
 
 			e.printStackTrace();
 		}
-		StartServer("localhost", 8000);
+	//	StartServer("localhost", 8000);
+	//	StartServer("207.23.173.94", 8002);
+	//	StartServer("207.23.173.91", 8003);
 	}
 	
-	public static void StartServer(String remote_server, int port) {
-		System.out.println("Starting server on port: " + Integer.toString(port));
+	public static void StartServer(String remote_server, int port) throws IOException {
+		System.out.println("\n Starting server on port: " + Integer.toString(port));
 		String data = null;
 		Socket skt = null;
+	
 		try {
-			skt = new Socket(remote_server, port);
-		
-		} catch (UnknownHostException e1) {		
-			System.out.print(" Socket Host not found ");
-		} catch (IOException e1) {
-			System.out.print(" Socket cannot be initialised ");
-		}
-		BufferedReader in = null;
-		try {
-			in = new BufferedReader(new InputStreamReader(skt.getInputStream()));
-		} catch (IOException e1) {
-			System.out.print(" Input stream cannot be initiallised ");
-		}
-		try {
-			data = in.readLine();
-			System.out.print("Server Received string: "+data);
-		} catch (IOException e1) {
-			System.out.print(" Data cannot ne read ");
-		}
-		
-	    try {
-			in.close();
-		} catch (IOException e1) {
-			System.out.print(" The input Stream cannot be closed ");
-		}
-	    try {
-			skt.close();
-		} catch (IOException e1) {
-			System.out.print(" The socket cannot be closed");
-		}
-	    if (data.equals("yaw")||(data.equals("pitch"))){
-			System.out.print("Yaw/pitch is received");
-				  System.out.print("The raspberry pi ipaddress is:" +skt.getInetAddress());
+				skt = new Socket(remote_server, port);
+				skt.setSoTimeout(1000);
+			} catch (UnknownHostException e1) {		
+				System.out.print(" Socket Host not found ");
+				return;
+			} catch (IOException e1) {
+				System.out.print(" Socket cannot be initialised ");
+				return;
 			}
+		
+			BufferedReader in = null;
+		try {
+				in = new BufferedReader(new InputStreamReader(skt.getInputStream()));
+			} catch (IOException e1) {
+				System.out.print(" Input stream cannot be initiallised ");
+				if(skt.isConnected()){
+					skt.close();
+				}
+				return;
+			}
+		try {
+				data = in.readLine();
+				System.out.print("Server Received string: "+data);
+			} catch (IOException e1) {
+				System.out.print(" Data cannot ne read ");
+				if(skt.isConnected()){
+					skt.close();
+				}
+				if(in.ready()){
+					in.close();
+				}
+				return;
+			}
+		finally {
+				try {
+						in.close();
+					} catch (IOException e1) {
+						System.out.print(" The input Stream cannot be closed ");
+					}
+				
+				try {
+						skt.close();
+					} catch (IOException e1) {
+						System.out.print(" The socket cannot be closed");
+					}
+			}
+		
+		if (data.equals("yaw")){
+			System.out.print("The Yaw raspberry pi ipaddress is:" +skt.getInetAddress());
+		} else if (data.equals("pitch")) {
+			System.out.print("The Pitch raspberry pi ipaddress is:" +skt.getInetAddress());
+		}
 	}
 }
+
