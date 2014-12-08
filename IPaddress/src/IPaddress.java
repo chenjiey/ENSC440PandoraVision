@@ -30,9 +30,7 @@ public class IPaddress {
 
 			e.printStackTrace();
 		}
-	//	StartServer("localhost", 8000);
-	//	StartServer("207.23.173.94", 8002);
-	//	StartServer("207.23.173.91", 8003);
+
 	}
 	
 	public static void StartServer(String remote_server, int port) throws IOException {
