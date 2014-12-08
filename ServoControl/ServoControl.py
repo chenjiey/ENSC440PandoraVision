@@ -31,6 +31,8 @@ import os
 HOST = ''
 PORT = int(os.environ.get("PORT", 8000))  # identifes what data we want
 
+WHOAMI = 'pitch'  # Identifies which servo motor
+
 # Initial Camera position upon a client successfully connecting to the server
 INITIAL_POSITION = 90
 
@@ -48,10 +50,18 @@ COORD_SYS = ABSOLUTE
 
 TEST = 1
 if TEST:
-    PWM = './'
+    PWM_STR = './'
 else:
-    PWM = '/sys/class/rpi-pwm/pwm0/'
+    PWM_STR = '/sys/class/rpi-pwm/pwm0/'
 
+RASBIAN, OCCIDENTALIS = (0, 1)
+
+# Sets the behavior of the script
+__DISTRIBUTION__ = RASBIAN
+
+if __DISTRIBUTION__ == RASBIAN:
+    import RPIO.PWM as PWM
+    PIN = 17
 
 def move_servo(angle):
     """
@@ -66,7 +76,7 @@ def move_servo(angle):
 
 def access_property(prop, value):
     """Accesses a property of the PWM on the RPi"""
-    prop = ''.join([PWM, prop])
+    prop = ''.join([PWM_STR, prop])
     try:
         with open(prop, 'w') as f:
             f.write(value)
@@ -94,6 +104,8 @@ def main(connection, client_address, current_position):
         Update the current position
    
     """
+    if __DISTRIBUTION__ == RASBIAN:
+        servo = PWM.Servo()
     print "Connected to:", client_address
 
     # ------------------------- Event Algorithm --------------------------------
@@ -101,6 +113,10 @@ def main(connection, client_address, current_position):
 
         # Wait to receive data from a client, proceed when data has arrived
         recv_angle = connection.recv(1024)
+
+        if recv_angle.lower() == 'whoami':
+            connection.send(WHOAMI)
+            break
 
         # If close is received terminate the server. Testing purposes only
         if recv_angle.lower() == 'close':
@@ -130,10 +146,20 @@ def main(connection, client_address, current_position):
         
         print "Moving camera by: %s degrees" % recv_angle
 
-        move_servo(new_position)
+        if __DISTRIBUTION__ == RASBIAN:
+
+            # TODO(Jeremy 2014-12-08): Determing how the angle maps to the pulse
+            #        with stored in current_position
+
+            current_position = 1500  # micro seconds
+            servo.set_servo(PIN, current_position)
+        else:
+            move_servo(new_position)
 
         current_position = new_position
         print "current_position: %s" % current_position
+
+        servo.stop_servo(PIN)
 
     connection.close()
     return recv_angle
@@ -170,12 +196,19 @@ if __name__ == '__main__':
         #       Use Full Duplex communication between endpoint 1 and endpoint 2 
         #       so communication can occur in either direction
 
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        cnt = 0
+        while cnt < 10:
+            try:
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        # Bind configures the socket to the host address and the port number
-        # begins watching port 8000
-        
-        sock.bind((HOST, PORT))
+                # Bind configures the socket to the host address and the port number
+                # begins watching port 8000
+                
+                sock.bind((HOST, PORT))
+                cnt += 1
+
+            except Exception, e:
+                print "Failed to restart server"
 
         # Waits for single client to connect
         sock.listen(1)
