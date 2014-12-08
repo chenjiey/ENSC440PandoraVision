@@ -18,6 +18,7 @@ public class TestServer {
 			    out.print("yaw");	
 	            out.close();
 			    socket_1.close();
+			    server.close();
 			} catch (IOException e1) {
 				  System.out.print("Server didn't get initialized\n");
 				  e1.printStackTrace();

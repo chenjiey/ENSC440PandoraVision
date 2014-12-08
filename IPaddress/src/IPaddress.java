@@ -9,6 +9,7 @@ public class IPaddress {
 	
 	public static void main(String[] args) throws IOException {
 		int port = 8000;
+		//StartServer("localhost", 8000);
 		try {
 			
 			String MyIpAddress = InetAddress.getLocalHost().getHostAddress();
@@ -16,7 +17,7 @@ public class IPaddress {
 			int IpAddrLength = MyIpAddress.length();
 			String TestIpAddress = MyIpAddress;
 			
-			for (int i=1;i<256; i++){
+			for (int i=1;i<255; i++){
 				if(TestIpAddress.length() >IpAddrLength){
 					TestIpAddress = TestIpAddress.substring(0, IpAddrLength-2) ;
 				}
