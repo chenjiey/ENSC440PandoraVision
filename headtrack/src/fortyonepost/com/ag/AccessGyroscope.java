@@ -9,6 +9,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -75,9 +76,9 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 	private int SENSOR = RUN_AVG;
 	
 	private static final int MAX_RUN_AVG = 100;
-	public static final String EXTRA_MESSAGE = null;
-	public static final String EXTRA_MESSAGE2 = null;
-	public static final String EXTRA_MESSAGE3 = null;
+	public static final String EXTRA_MESSAGE = "EXTRA_MESSAGE";
+	public static final String EXTRA_MESSAGE2 = "EXTRA_MESSAGE2";
+	public static final String EXTRA_MESSAGE3 = "EXTRA_MESSAGE3";
 	private double[] runningAverage = new double[MAX_RUN_AVG];
 	private int arrayCnt = 0;
 	private double runAvg = 0;
@@ -100,7 +101,9 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
         serverIP = (EditText) findViewById(R.id.editText2); // reference to the text field
         serverPort = (EditText) findViewById(R.id.editText3); // reference to the text field
         toggleButton1 = (ToggleButton) findViewById(R.id.toggleButton1); // reference to the send button
-        
+		twoVideo1.setText("rtsp://192.168.1.3:8554/pi_encode.h264");
+		twoVideo2.setText("rtsp://192.168.1.7:8554/pi_encode.h264");
+		
         //get a hook to the sensor service
         sManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         initListeners();
@@ -138,11 +141,11 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
     public void initListeners(){
     	sManager.registerListener(this,
     			sManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-            SensorManager.SENSOR_DELAY_FASTEST);
+            SensorManager.SENSOR_DELAY_NORMAL);
      
     	sManager.registerListener(this,
     			sManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
-            SensorManager.SENSOR_DELAY_FASTEST);
+            SensorManager.SENSOR_DELAY_NORMAL);
     }
     
 	@Override
@@ -279,6 +282,7 @@ public class AccessGyroscope extends Activity implements SensorEventListener {
 		String sendURL = null;
 		String sendURL2 = null;
 		// If user doesn't enter any URL, use the default URL
+
 		if (twoVideo1.getText().toString().matches("")) {
 			sendURL = videoURL;	
 		} else {
