@@ -61,12 +61,14 @@ public class UserInterface extends JFrame {
 		
 		getContentPane().setLayout(null);
 		
+		/* Commenting the region below to reduce the GUI size	
 		label_1 = new JLabel(lHeadOrientation);
 		label_1.setFont(new Font(user_font, Font.BOLD, 16));
 		label_1.setLocation(20, 5);
 		label_1.setSize(300, 30);
 		getContentPane().add(label_1);
 		
+	
 		label_2 = new JLabel(lheader);
 		label_2.setFont(new Font(user_font, Font.BOLD, 16));
 		label_2.setLocation(450, 5);
@@ -83,32 +85,37 @@ public class UserInterface extends JFrame {
 		label_4.setFont(new Font(user_font, Font.BOLD, 16));
 		label_4.setLocation(640, 50);
 		label_4.setSize(300, 30);
-		getContentPane().add(label_4);
+		getContentPane().add(label_4); */
 		
 		label_5 = new JLabel(lControlOptions);
 		label_5.setFont(new Font(user_font, Font.BOLD, 14));
-		label_5.setLocation(20, 270);
+		label_5.setLocation(100, 10);
 		label_5.setSize(300, 50);
 		getContentPane().add(label_5);
 
 //		System.out.printf("%d", hndlOrientData);
 		
 //		orientation_Data = new JTextField(lHeadOrientation);
+		/* Commenting the region below to reduce the GUI size	
 		orientation_Data = new JTextArea(lHeadOrientation, 5, 1);
 		orientation_Data.setLineWrap(true);
 		orientation_Data.setEditable(false);
 		orientation_Data.setLocation(5, 50);
-		orientation_Data.setSize(200, 200);
+		orientation_Data.setSize(200, 200); */
 		
 		
 //		JScrollPane scrollPane = new JScrollPane(orientation_Data);
+		
+		/* Commenting the region below to reduce the GUI size	
+		 
 		hndlOrientData = orientation_Data.getComponentCount();
 //		System.out.printf("%d", hndlOrientData);
 		
 //		getContentPane().add(scrollPane);
-		getContentPane().add(orientation_Data);
+		getContentPane().add(orientation_Data); */
 		
 		// Your going to have to change this to a JPanel most likely
+		/* Commenting the region below to reduce the GUI size	
 		left_Eye = new JTextField();
 		left_Eye.setLocation(250, 100);
 		left_Eye.setSize(250, 400);
@@ -118,7 +125,7 @@ public class UserInterface extends JFrame {
 		right_Eye = new JTextField();
 		right_Eye.setLocation(550, 100);
 		right_Eye.setSize(250, 400);
-		getContentPane().add(right_Eye);
+		getContentPane().add(right_Eye);*/
 		
   	    button_Start = new JButton(buttonLabelStart);
 	//	button_Start.addActionListener(this);
@@ -143,7 +150,7 @@ public class UserInterface extends JFrame {
   	    
 		button_Start.setFont(new Font(user_font, Font.BOLD, 16));
 		button_Start.setForeground(Color.GREEN);
-		button_Start.setLocation(45, 350);
+		button_Start.setLocation(145, 100);
 		button_Start.setSize(100,30);
 		getContentPane().add(button_Start);
 		
@@ -156,20 +163,20 @@ public class UserInterface extends JFrame {
   	    		System.out.printf("Stopping Server\n");
   	    		button_Start.setVisible(true);
   	    		
-  	    		orientation_Data.append("test\n");
+  	    	/*	orientation_Data.append("test\n");*/
   	 	}
   	    });
 		
 		button_Stop.setFont(new Font(user_font, Font.BOLD, 16));
 		button_Stop.setForeground(Color.RED);
-		button_Stop.setLocation(45, 400);
+		button_Stop.setLocation(145, 150);
 		button_Stop.setSize(100,30);
 		getContentPane().add(button_Stop);
 		
 		button_Reset = new JButton(buttonLabelReset);
 		button_Reset.setFont(new Font(user_font, Font.BOLD, 16));
 		button_Reset.setForeground(Color.BLUE);
-		button_Reset.setLocation(45, 450);
+		button_Reset.setLocation(145, 200);
 		button_Reset.setSize(100,30);
 		getContentPane().add(button_Reset);
 		
@@ -179,7 +186,7 @@ public class UserInterface extends JFrame {
 		System.out.println("Art System");
 		JFrame frame = new UserInterface("ART System");
 		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		frame.setSize(805,600);
+		frame.setSize(400,400);
 		frame.setResizable(false);
 		frame.setVisible(true);
 	}
