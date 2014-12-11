@@ -39,7 +39,7 @@ public class UserInterface extends JFrame {
 	
 	private int hndlOrientData;
 
-	final JButton button_Start;
+	JButton button_Start = null;
 	JButton button_Stop, button_Reset;
 	static JLabel[] labels = new JLabel[2];
 //	static JLabel label_1;
@@ -141,79 +141,73 @@ public class UserInterface extends JFrame {
 		right_Eye.setSize(250, 400);
 		getContentPane().add(right_Eye);*/
 		
-  	    button_Start = new JButton(buttonLabelStart);
-  	    
-		final JButton button_test = new JButton("TEST");
+//		final JButton button_test = new JButton("TEST");
+
+		JButton button_test = create_button(
+				"Test", Color.BLACK, new int[] {280, 300}, new int[] {100, 30});
 		button_test.addActionListener(new ActionListener() {
-			
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				test();
-				// TODO Auto-generated method stub
-				
 			}
 		});
-		
-		button_test.setFont(new Font("TEST", Font.BOLD, 16));
-		button_test.setForeground(Color.GREEN);
-		button_test.setLocation(200, 150);
-		button_test.setSize(100,30);
 		getContentPane().add(button_test);
-		
-	//	button_Start.addActionListener(this);
 
+		button_Start = create_button(
+				buttonLabelStart, Color.GREEN, new int[] {145, 100}, new int[] {100, 30});
   	    button_Start.addActionListener(new ActionListener() {
   	    	public void actionPerformed(ActionEvent e) {
-  	    		if (state == STARTED) {
-  	    			System.out.println("System already started");
-  	    			return;
-  	    		}
-  	    		
-  	    		System.out.println("Pressed Start Button");
-  	    		state = STARTED;
-  	    		
-    			StartServer ss = new StartServer(8000, 8000);
-    			Thread th = new Thread(ss);
-    			th.start();
-    			button_Start.setVisible(false);
-    			
+  	    		occurOnStart();
   	    	}
   	    });
   	    
-		button_Start.setFont(new Font(user_font, Font.BOLD, 16));
-		button_Start.setForeground(Color.GREEN);
-		button_Start.setLocation(145, 100);
-		button_Start.setSize(100,30);
-		getContentPane().add(button_Start);
-		
-		
-		button_Stop = new JButton(buttonLabelStop);
+  	    getContentPane().add(button_Start);
+  	    
+		button_Stop = create_button(
+				buttonLabelStop, Color.RED, new int[] {145,  150}, new int[] {100, 30});
 		button_Stop.addActionListener(new ActionListener(){
   	    	public void actionPerformed(ActionEvent e) {
-  	    		state = STOPPED;
-//  	    		StopServer(server);
-  	    		System.out.printf("Stopping Server\n");
-  	    		button_Start.setVisible(true);
-  	    		
-  	    	/*	orientation_Data.append("test\n");*/
-  	 	}
-  	    });
-		
-		button_Stop.setFont(new Font(user_font, Font.BOLD, 16));
-		button_Stop.setForeground(Color.RED);
-		button_Stop.setLocation(145, 150);
-		button_Stop.setSize(100,30);
+  	    		occurOnStop();
+  	    	}
+  	    });		
 		getContentPane().add(button_Stop);
 		
-		button_Reset = new JButton(buttonLabelReset);
-		button_Reset.setFont(new Font(user_font, Font.BOLD, 16));
-		button_Reset.setForeground(Color.BLUE);
-		button_Reset.setLocation(145, 200);
-		button_Reset.setSize(100,30);
+		button_Reset = create_button(buttonLabelStop, Color.BLUE, new int[] {145, 200}, new int[] {100, 30});
 		getContentPane().add(button_Reset);
 		
 		pandora.TestIP.get_addr();
-		
+
+	}
+	
+	@SuppressWarnings("restriction")
+	private JButton create_button(String label, Color colour, int[] pos, int[] size) {
+		JButton button = new JButton(label);
+
+		button.setFont(new Font(label, Font.BOLD, 16));
+		button.setForeground(colour);
+		button.setLocation(pos[0], pos[1]);
+		button.setSize(size[0], size[1]);
+
+		return button;
+	}
+	
+	public void occurOnStart() {
+  		if (state == STARTED) {
+  			System.out.println("System already started");
+  			return;
+  		}
+  		System.out.println("Pressed Start Button");
+  		state = STARTED;
+		StartServer ss = new StartServer(8000, 8000);
+		Thread th = new Thread(ss);
+		th.start();
+		button_Start.setVisible(false);
+	}
+	
+	public void occurOnStop() {
+  		state = STOPPED;
+//		StopServer(server);
+		System.out.printf("Stopping Server\n");
+		button_Start.setVisible(true);
 	}
 	
 	@SuppressWarnings("restriction")
