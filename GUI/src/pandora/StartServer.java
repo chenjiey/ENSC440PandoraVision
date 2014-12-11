@@ -1,3 +1,5 @@
+package pandora;
+
 import java.awt.PageAttributes.OrientationRequestedType;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,6 +8,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
 import javax.swing.*;
 
 
@@ -33,6 +36,7 @@ public class StartServer implements Runnable {
 		System.out.println("Set port to: " + Integer.toString(port));
 	}
 	
+	@SuppressWarnings("restriction")
 	private void updateGUI(final String t_update) {
 		// This adds a function to execute in the Event-Dispatch-Thread
 		// Avoiding any race conditions that could occur!
@@ -80,7 +84,8 @@ public class StartServer implements Runnable {
 
 		try {
 			System.out.println("I am the client2");
-			producer2 = new Socket(rem_server2, 8002); //client socket for the raspberry pi
+			producer2 = new Socket(rem_server2, 8002
+					); //client socket for the raspberry pi
 			printwriter2 = new PrintWriter(producer2.getOutputStream(), true);
 			System.out.println("I am the client2 connected");
 		} catch (UnknownHostException e) {
