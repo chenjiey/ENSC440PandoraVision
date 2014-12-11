@@ -112,19 +112,21 @@ public class TestIP {
 			out = new PrintWriter(skt.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(skt.getInputStream()));
 		} catch (IOException e1) {
-			System.out.println(" Input stream cannot be initiallised ");
+			System.out.println(" Input stream cannot be initialised ");
 			return;
 		}
 		System.out.println("Instream created");
 		
 		try {
-			out.println("whoami");
+			out.write("whoami");
+			out.flush();
 			data = in.readLine();
 		} catch (IOException e1) {
 //			System.out.print("Data cannot be read ");
 			return;
 
 		} finally {
+				out.close();
 				try {
 						in.close();
 					} catch (IOException e1) {
