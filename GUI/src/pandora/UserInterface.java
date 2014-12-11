@@ -6,13 +6,17 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
 import javax.swing.*;
 
 @SuppressWarnings("restriction")
 public class UserInterface extends JFrame { 
 	
 	public static List<String[]> rpi_list = new ArrayList<String[]>();
+//	public static List<String[]> rpi_list = ArrayList<String[]>(new String[] {"127.0.0.1", "yaw"}, new String[] {"127.0.0.1", "pitch"});
+//	public static List<String[]> rpi_list = Arrays.asList(new String[] {"127.0.0.1", "yaw"}, new String[] {"127.0.0.1", "pitch"});
 	
 	private static final int STARTED = 0;
 	private static final int STOPPED = 1;
@@ -42,10 +46,7 @@ public class UserInterface extends JFrame {
 	JButton button_Start = null;
 	JButton button_Stop, button_Reset;
 	static JLabel[] labels = new JLabel[2];
-//	static JLabel label_1;
-//
-//	static JLabel label_2;
-//
+
 	static JLabel label_3;
 	
 	JLabel label_4;
@@ -68,12 +69,7 @@ public class UserInterface extends JFrame {
 		
 		JTextField left_Eye, right_Eye;
 		
-	//	int NUM_SERVERS = 1;
-		
-	//	int arr[NUM_SERVERS];
-		
 		getContentPane().setLayout(null);
-		
 		
 		labels[0] = new JLabel("PI1: NOT RUNNING");
 		labels[0].setFont(new Font(user_font, Font.BOLD, 16));
@@ -171,7 +167,7 @@ public class UserInterface extends JFrame {
   	    });		
 		getContentPane().add(button_Stop);
 		
-		button_Reset = create_button(buttonLabelStop, Color.BLUE, new int[] {145, 200}, new int[] {100, 30});
+		button_Reset = create_button(buttonLabelReset, Color.BLUE, new int[] {145, 200}, new int[] {100, 30});
 		getContentPane().add(button_Reset);
 		
 		pandora.TestIP.get_addr();
@@ -225,6 +221,8 @@ public class UserInterface extends JFrame {
 		frame.setResizable(false);
 		frame.setVisible(true);
 	}
+	
+
 	
 	@SuppressWarnings("restriction")
 	public static void main(String[] args) {

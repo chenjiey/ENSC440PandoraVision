@@ -3,7 +3,9 @@
  */
 package fortyonepost.com.ag;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -14,6 +16,7 @@ import android.R.integer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 /**
  * @author jeremy
@@ -64,9 +67,12 @@ public class SendMsg implements Runnable {
 		try {
 			System.out.printf("THREAD-2: CONNECTING TO: %s:%d\n", ip, port);
 			client = new Socket(ip, port);
-			
 			System.out.println("THREAD-2: HAS CONNECTED");
-			
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+			String rpi_ips = in.readLine();
+			Log.i("SEND_MSG", String.format("Received from Control PC: %s", rpi_ips));
+
 			printwriter = new PrintWriter(client.getOutputStream(), true);
 			
 		} catch (UnknownHostException e) {
