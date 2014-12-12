@@ -72,8 +72,8 @@ public class StartServer implements Runnable {
 		}
 		
 		for (String[] element : pandora.UserInterface.rpi_list){
-			if (element[0].startsWith("\\")) {
-				ip = element[0].replaceFirst("\\", "");
+			if (element[0].startsWith("/")) {
+				ip = element[0].replaceFirst("/", "");
 			} else {
 				ip = element[0]; 
 			}
@@ -145,12 +145,12 @@ public class StartServer implements Runnable {
 			client = server.accept();
 			System.out.println("Accepted the client connection");
 
-			PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+//			PrintWriter out = new PrintWriter(client.getOutputStream(), true);
 
 			System.out.printf("PRINTWRITER CREATED!!!");
 			
-			out.write(String.format("%s,%s\n", yaw_ip, pitch_ip));
-			out.flush();
+//			out.write(String.format("%s,%s\n", yaw_ip, pitch_ip));
+//			out.flush();
 
 			System.out.printf("Finished!!!");
 
