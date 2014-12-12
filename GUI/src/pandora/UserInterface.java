@@ -46,7 +46,6 @@ public class UserInterface extends JFrame {
 	JButton button_Start = null;
 	JButton button_Stop, button_Reset;
 	static JLabel[] labels = new JLabel[2];
-<<<<<<< HEAD
 	
 //	static JLabel label_1;
 //
@@ -58,8 +57,6 @@ public class UserInterface extends JFrame {
 	static JLabel pitch;
 	static JLabel IP_Addreses;
  	
-=======
->>>>>>> FETCH_HEAD
 
 	static JLabel label_3;
 	
@@ -85,7 +82,6 @@ public class UserInterface extends JFrame {
 		
 		getContentPane().setLayout(null);
 		
-<<<<<<< HEAD
 
 		IP_Addreses = new JLabel("Raspberry Pis' IP Addresses");
 		IP_Addreses.setFont(new Font(user_font, Font.BOLD, 15));
@@ -97,11 +93,11 @@ public class UserInterface extends JFrame {
 		labels[0] = new JLabel("PI2: NOT RUNNING");
 		labels[0].setFont(new Font(user_font, Font.ITALIC, 14));
 		labels[0].setLocation(120, 220);
-=======
+
 		labels[0] = new JLabel("PI1: NOT RUNNING");
 		labels[0].setFont(new Font(user_font, Font.BOLD, 16));
 		labels[0].setLocation(25, 250);
->>>>>>> FETCH_HEAD
+
 		labels[0].setSize(300, 30);
 		getContentPane().add(labels[0]);
 	//	String[] helper = new String [2];
@@ -217,12 +213,10 @@ public class UserInterface extends JFrame {
   	    });		
 		getContentPane().add(button_Stop);
 		
-<<<<<<< HEAD
+
 		button_Reset = create_button(buttonLabelReset, Color.BLUE, new int[] {45, 150}, new int[] {100, 30});
 
-=======
-		button_Reset = create_button(buttonLabelReset, Color.BLUE, new int[] {145, 200}, new int[] {100, 30});
->>>>>>> FETCH_HEAD
+
 		getContentPane().add(button_Reset);
 		
 		pandora.TestIP.get_addr();
