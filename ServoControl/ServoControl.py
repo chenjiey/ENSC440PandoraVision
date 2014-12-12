@@ -137,7 +137,7 @@ def main(connection, client_address, current_position, servo):
                 raise e
 
             if recv_angle.lower() in ['whoami', 'whoami\n', 'whoami\r\n']:
-                import pdb; pdb.set_trace()
+                # import pdb; pdb.set_trace()
                 connection.send(WHOAMI)
                 break
 
@@ -194,6 +194,7 @@ def main(connection, client_address, current_position, servo):
     except Exception, e:
         print "Failed to do stuff"
     finally:
+        print "CLOSING CLIENT CONNECTION"
         # servo.stop_servo(PIN)
         connection.close()
     return recv_angle
@@ -246,22 +247,26 @@ if __name__ == '__main__':
             #       so communication can occur in either direction
 
             cnt = 0
-            while cnt < 10:
-                try:
-                    cnt += 1
-                    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            # while cnt < 10:
+                # try:
+            cnt += 1
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-                    # Bind configures the socket to the host address and the port number
-                    # begins watching port 8000
-                    
-                    sock.bind((HOST, PORT))
-                    result = ''
+            # Bind configures the socket to the host address and the port number
+            # begins watching port 8000
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            sock.bind((HOST, PORT))
+            result = ''
+            print "SERVER: CREATED"
+                # break
                 
-                except Exception, e:
-                    time.sleep(1)
-                    print "Failed to restart server"
-                    if cnt >= 9:
-                        result = 'close'
+                # except Exception, e:
+                #     print Exception
+                #     print e
+                #     time.sleep(1)
+                #     print "Failed to restart server"
+                #     if cnt >= 9:
+                #         result = 'close'
 
             if result == 'close':
                 print "Server Failed to initialize, ensure that all"
@@ -284,25 +289,22 @@ if __name__ == '__main__':
             result = main(connection, client_address, current_position, servo)
             print "connection has stopped"
 
-            sock.close()
-            
+            # import pdb; pdb.set_trace()
+            # print "CLOSING THE SOCKET"
+
             servo.stop_servo(PIN)
             if result == 'close':
                 break
 
     except Exception, e:
-        print "Closing Sockets and connections"
+        print "Closing connections"
         try:
             connection.close()
         except:
             pass
-        try:
-            sock.close()
-        except:
-            pass
-        raise e
     
     try:
+        sock.close()
         del sock, connection, client_address
     except Exception, e:
         pass
