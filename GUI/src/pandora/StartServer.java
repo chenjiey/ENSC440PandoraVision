@@ -84,7 +84,7 @@ public class StartServer implements Runnable {
 		
 		String yaw_ip = setIP("yaw");
 		String pitch_ip = setIP("pitch");
-		
+		/*
 		try {
 			// Connect to the Raspberry Pi Yaw
 			yaw = new Socket(yaw_ip, rem_port);
@@ -121,14 +121,21 @@ public class StartServer implements Runnable {
 
 		if (pitch == null)
 			return;
-
+	*/
 		//server socket for the android app		
 		try {
 			// Waiting for connection from Android App
 			server = new ServerSocket(port); 
 			client = server.accept();
 			PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+
+			System.out.printf("PRINTWRITER CREATED!!!");
+			
 			out.write(String.format("%s,%s\n", yaw_ip, pitch_ip));
+			out.flush();
+
+			System.out.printf("Finished!!!");
+
 		} catch (IOException e1) {
 			  System.out.printf("%s:Error: Tried to create server but failed\n", name);
 		}

@@ -54,21 +54,9 @@ import android.os.Message;
 	//the Sensor Manager
 	private SensorManager sManager;
 	
-    // magnetic field vector
-//    private float[] magnet = new float[3];
- 
-    // accelerometer vector
-//    private float[] accel = new float[3];
- 
-    // orientation angles from accel and magnet
-//    private float[] accMagOrientation = new float[3];
- 
-    // accelerometer and magnetometer based rotation matrix
-//    private float[] rotationMatrix = new float[9];
-    
 	private Socket client;
 	private PrintWriter printwriter;
-	private EditText serverIP, serverPort, oneVideo, twoVideo1, twoVideo2;
+	public static EditText serverIP, serverPort, oneVideo, twoVideo1, twoVideo2;
 	private ToggleButton toggleButton1;
 	private String messsage;
 	int port = 0;
@@ -478,8 +466,8 @@ import android.os.Message;
 //				yaw, (int) (Math.toDegrees(accMagOrientation[1]) + 180), pitch));
 				yaw, pitch));
 
-//		messsage = String.format("%d,%d\n", yaw, pitch);
-		messsage = String.format("%d\n", yaw);
+		messsage = String.format("%d,%d\n", yaw, pitch);
+//		messsage = String.format("%d\n", yaw);
 //		messsage = (int) runAvg;
 		
 		if (sendmsg == null) {
