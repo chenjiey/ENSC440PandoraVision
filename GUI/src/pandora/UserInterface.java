@@ -46,6 +46,17 @@ public class UserInterface extends JFrame {
 	JButton button_Start = null;
 	JButton button_Stop, button_Reset;
 	static JLabel[] labels = new JLabel[2];
+	
+//	static JLabel label_1;
+//
+//	static JLabel label_2;
+//
+//	static JTextArea orientation_Data;
+	static JLabel orientation_Data;
+	static JLabel yaw;
+	static JLabel pitch;
+	static JLabel IP_Addreses;
+ 	
 
 	static JLabel label_3;
 	
@@ -65,30 +76,65 @@ public class UserInterface extends JFrame {
 	public UserInterface(String name) throws IOException {
 		super(name);
 		
-		final JTextArea orientation_Data;
+	//	final JTextArea orientation_Data;
 		
 		JTextField left_Eye, right_Eye;
 		
 		getContentPane().setLayout(null);
 		
+
+		IP_Addreses = new JLabel("Raspberry Pis' IP Addresses");
+		IP_Addreses.setFont(new Font(user_font, Font.BOLD, 15));
+		IP_Addreses.setLocation(100, 200);
+		IP_Addreses.setSize(300, 20);
+		getContentPane().add(IP_Addreses);
+		
+
+		labels[0] = new JLabel("PI2: NOT RUNNING");
+		labels[0].setFont(new Font(user_font, Font.ITALIC, 14));
+		labels[0].setLocation(120, 220);
+
 		labels[0] = new JLabel("PI1: NOT RUNNING");
 		labels[0].setFont(new Font(user_font, Font.BOLD, 16));
 		labels[0].setLocation(25, 250);
+
 		labels[0].setSize(300, 30);
 		getContentPane().add(labels[0]);
+	//	String[] helper = new String [2];
+	//	helper. =rpi_list.get(0);
+	//	labels[0].setText(rpi_list.get(0));
 		
-	
 		labels[1] = new JLabel("PI2: NOT RUNNING");
-		labels[1].setFont(new Font(user_font, Font.BOLD, 16));
-		labels[1].setLocation(25, 275);
+		labels[1].setFont(new Font(user_font, Font.ITALIC, 14));
+		labels[1].setLocation(120, 250);
 		labels[1].setSize(300, 30);
 		getContentPane().add(labels[1]);
+	//	labels[1].setText(rpi_list.get(1));
+		
 		
 		label_3 = new JLabel("Control IP Address: NOT FOUND");
 		label_3.setFont(new Font(user_font, Font.BOLD, 16));
 		label_3.setLocation(25, 300);
 		label_3.setSize(300, 30);
 		getContentPane().add(label_3);
+		
+		orientation_Data = new JLabel("Head Orientation Data");
+		orientation_Data.setFont(new Font(user_font, Font.BOLD, 15));
+		orientation_Data.setLocation(230, 30);
+		orientation_Data.setSize(300, 20);
+		getContentPane().add(orientation_Data);
+		
+		yaw = new JLabel("Yaw: NOT FOUND");
+		yaw.setFont(new Font(user_font, Font.ITALIC, 14));
+		yaw.setLocation(250, 60);
+		yaw.setSize(300, 20);
+		getContentPane().add(yaw);
+		
+		pitch = new JLabel("Pitch: NOT FOUND");
+		pitch.setFont(new Font(user_font, Font.ITALIC, 14));
+		pitch.setLocation(250, 90);
+	    pitch.setSize(300, 20);
+		getContentPane().add(pitch);
 
 /*      Commenting the region below to reduce the GUI size		
 /*		label_4 = new JLabel(lRightImage);
@@ -99,8 +145,8 @@ public class UserInterface extends JFrame {
 		
 		label_5 = new JLabel(lControlOptions);
 		label_5.setFont(new Font(user_font, Font.BOLD, 14));
-		label_5.setLocation(100, 10);
-		label_5.setSize(300, 50);
+		label_5.setLocation(10, 10);
+		label_5.setSize(300, 20);
 		getContentPane().add(label_5);
 
 //		System.out.printf("%d", hndlOrientData);
@@ -122,7 +168,7 @@ public class UserInterface extends JFrame {
 //		System.out.printf("%d", hndlOrientData);
 		
 //		getContentPane().add(scrollPane);
-		getContentPane().add(orientation_Data); */
+		getContentPane().add(orientation_Data); 
 		
 		// Your going to have to change this to a JPanel most likely
 		/* Commenting the region below to reduce the GUI size	
@@ -149,7 +195,7 @@ public class UserInterface extends JFrame {
 		getContentPane().add(button_test);
 
 		button_Start = create_button(
-				buttonLabelStart, Color.GREEN, new int[] {145, 100}, new int[] {100, 30});
+				buttonLabelStart, Color.GREEN, new int[] {45, 50}, new int[] {100, 30});
   	    button_Start.addActionListener(new ActionListener() {
   	    	public void actionPerformed(ActionEvent e) {
   	    		occurOnStart();
@@ -159,7 +205,7 @@ public class UserInterface extends JFrame {
   	    getContentPane().add(button_Start);
   	    
 		button_Stop = create_button(
-				buttonLabelStop, Color.RED, new int[] {145,  150}, new int[] {100, 30});
+				buttonLabelStop, Color.RED, new int[] {45,  100}, new int[] {100, 30});
 		button_Stop.addActionListener(new ActionListener(){
   	    	public void actionPerformed(ActionEvent e) {
   	    		occurOnStop();
@@ -167,7 +213,10 @@ public class UserInterface extends JFrame {
   	    });		
 		getContentPane().add(button_Stop);
 		
-		button_Reset = create_button(buttonLabelReset, Color.BLUE, new int[] {145, 200}, new int[] {100, 30});
+
+		button_Reset = create_button(buttonLabelReset, Color.BLUE, new int[] {45, 150}, new int[] {100, 30});
+
+
 		getContentPane().add(button_Reset);
 		
 		pandora.TestIP.get_addr();
@@ -263,6 +312,8 @@ public class UserInterface extends JFrame {
 	public void test() {
 		for (String[] element : rpi_list ) {
 			System.out.printf("rpi_list is %s %s:\n", element[0], element[1]);
+		//	labels[0].setText(element[0]);
+		//	labels[1].setText(element[1]);
 		}
 	}
 	
