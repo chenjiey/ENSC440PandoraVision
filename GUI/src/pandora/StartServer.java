@@ -23,7 +23,10 @@ public class StartServer implements Runnable {
 //	public String rem_server = "127.0.0.1";
 //	public String rem_server1 = "127.0.0.1"; //rpi1
 //	public String rem_server2 = "127.0.0.1"; //rpi2
+<<<<<<< HEAD
 
+=======
+>>>>>>> FETCH_HEAD
 	public static int thread_cnt = 1;
 	
 	public Socket yaw, pitch;
@@ -37,6 +40,7 @@ public class StartServer implements Runnable {
 		System.out.println("Set port to: " + Integer.toString(port));
 	}
 	
+<<<<<<< HEAD
 
 	@SuppressWarnings("restriction")
 	private void updateGUI(final String yawUpdate, final String pitchUpdate) {
@@ -51,6 +55,8 @@ public class StartServer implements Runnable {
 				pandora.UserInterface.yaw.setText(yawLabel);
 				pandora.UserInterface.pitch.setText(pitchLabel);
 
+=======
+>>>>>>> FETCH_HEAD
 //	@SuppressWarnings("restriction")
 //	private void updateGUI(final String t_update) {
 //		// This adds a function to execute in the Event-Dispatch-Thread
@@ -62,9 +68,13 @@ public class StartServer implements Runnable {
 ////				orientation_Data.append(t_update);
 //			}
 //		});
+<<<<<<< HEAD
 	}
 		});
 }
+=======
+//	}
+>>>>>>> FETCH_HEAD
 	
 	private static String setIP(String axis_expected) {
 		String ip = null;
@@ -81,7 +91,10 @@ public class StartServer implements Runnable {
 			}
 			if (element[1].equals(axis_expected)) {
 				return ip;
+<<<<<<< HEAD
 
+=======
+>>>>>>> FETCH_HEAD
 			}
 		}
 		System.out.printf("ERROR: Could not find %s\n", axis_expected);
@@ -108,7 +121,10 @@ public class StartServer implements Runnable {
 			// Connect to the Raspberry Pi Yaw
 			yaw = new Socket(yaw_ip, rem_port);
 			yawWriter = new PrintWriter(yaw.getOutputStream(), true);
+<<<<<<< HEAD
 
+=======
+>>>>>>> FETCH_HEAD
 		} catch (UnknownHostException e) {
 			
 //			e.printStackTrace();
@@ -125,10 +141,15 @@ public class StartServer implements Runnable {
 			return;
 
 		try {
+<<<<<<< HEAD
 
 			pitch = new Socket(pitch_ip, rem_port); //client socket for the raspberry pi
 			pitchWriter = new PrintWriter(pitch.getOutputStream(), true);
 
+=======
+			pitch = new Socket(pitch_ip, rem_port); //client socket for the raspberry pi
+			pitchWriter = new PrintWriter(pitch.getOutputStream(), true);
+>>>>>>> FETCH_HEAD
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 //			e.printStackTrace();
@@ -147,10 +168,15 @@ public class StartServer implements Runnable {
 		//server socket for the android app		
 		try {
 			// Waiting for connection from Android App
+<<<<<<< HEAD
 			System.out.print("Starting server for android app");
 			server = new ServerSocket(port); 
 			client = server.accept();
 			System.out.println("Accepted the client connection");
+=======
+			server = new ServerSocket(port); 
+			client = server.accept();
+>>>>>>> FETCH_HEAD
 			PrintWriter out = new PrintWriter(client.getOutputStream(), true);
 			out.write(String.format("%s,%s\n", yaw_ip, pitch_ip));
 		} catch (IOException e1) {
@@ -183,14 +209,18 @@ public class StartServer implements Runnable {
 
 			String[] datas = data.split(",");
 
+<<<<<<< HEAD
 			
 			updateGUI(datas[0], datas[1]);
 
+=======
+>>>>>>> FETCH_HEAD
 			if (data == null)
 				break;
 
 			System.out.println("Received Data1: " + datas[0]);
 			System.out.println("Received Data2: " + datas[1]);
+<<<<<<< HEAD
 
 		//	printwriter1.write(datas[0]); // write the message to output stream
 		//	printwriter2.write(datas[1]);
@@ -204,6 +234,12 @@ public class StartServer implements Runnable {
 			pitchWriter.write(datas[1]);
 			pitchWriter.flush();*/ 
 
+=======
+			yawWriter.write(datas[0]); // write the message to output stream
+			yawWriter.flush();
+			pitchWriter.write(datas[1]);
+			pitchWriter.flush();
+>>>>>>> FETCH_HEAD
 		}
 
 		System.out.println("Shutting down the server");
