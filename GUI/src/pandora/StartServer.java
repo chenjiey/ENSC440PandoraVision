@@ -99,7 +99,7 @@ public class StartServer implements Runnable {
 		String yaw_ip = setIP("yaw");
 		String pitch_ip = setIP("pitch");
 	
-		try {
+	/*	try {
 			// Connect to the Raspberry Pi Yaw
 			yaw = new Socket(yaw_ip, rem_port);
 			yawWriter = new PrintWriter(yaw.getOutputStream(), true);
@@ -135,7 +135,7 @@ public class StartServer implements Runnable {
 
 		if (pitch == null)
 			return;
-
+*/
 		//server socket for the android app		
 		try {
 			// Waiting for connection from Android App
@@ -197,7 +197,7 @@ public class StartServer implements Runnable {
 		//	printwriter2.flush();
 			System.out.println("Ending data received 1");
 
-			yawWriter.write(datas[0]); // write the message to output stream
+	/*		yawWriter.write(datas[0]); // write the message to output stream
 			yawWriter.flush();
 			pitchWriter.write(datas[1]);
 			pitchWriter.flush(); 
@@ -205,7 +205,7 @@ public class StartServer implements Runnable {
 			yawWriter.write(datas[0]); // write the message to output stream
 			yawWriter.flush();
 			pitchWriter.write(datas[1]);
-			pitchWriter.flush();
+			pitchWriter.flush();*/
 		}
 
 		System.out.println("Shutting down the server");
