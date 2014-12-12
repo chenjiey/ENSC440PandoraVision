@@ -90,28 +90,18 @@ public class UserInterface extends JFrame {
 		getContentPane().add(IP_Addreses);
 		
 
-		labels[0] = new JLabel("PI2: NOT RUNNING");
+		labels[0] = new JLabel("PI1: NOT RUNNING");
 		labels[0].setFont(new Font(user_font, Font.ITALIC, 14));
 		labels[0].setLocation(120, 220);
-
-		labels[0] = new JLabel("PI1: NOT RUNNING");
-		labels[0].setFont(new Font(user_font, Font.BOLD, 16));
-		labels[0].setLocation(25, 250);
-
 		labels[0].setSize(300, 30);
 		getContentPane().add(labels[0]);
-	//	String[] helper = new String [2];
-	//	helper. =rpi_list.get(0);
-	//	labels[0].setText(rpi_list.get(0));
 		
 		labels[1] = new JLabel("PI2: NOT RUNNING");
 		labels[1].setFont(new Font(user_font, Font.ITALIC, 14));
 		labels[1].setLocation(120, 250);
 		labels[1].setSize(300, 30);
 		getContentPane().add(labels[1]);
-	//	labels[1].setText(rpi_list.get(1));
-		
-		
+			
 		label_3 = new JLabel("Control IP Address: NOT FOUND");
 		label_3.setFont(new Font(user_font, Font.BOLD, 16));
 		label_3.setLocation(25, 300);
