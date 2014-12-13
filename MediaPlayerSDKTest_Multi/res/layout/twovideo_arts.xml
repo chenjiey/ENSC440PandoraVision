@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+    
+   		 <fragment
+		    android:name="veg.mediaplayer.sdk.testmulti.artsFirstFrag"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:id="@+id/artsvideo1"
+		    android:layout_weight="1"/>
+		
+		<fragment
+		    android:name="veg.mediaplayer.sdk.testmulti.artsSecondFrag"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:id="@+id/artsvideo2"
+		    android:layout_weight="1"/>
+		    
+
+</LinearLayout>
